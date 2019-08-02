@@ -1,3 +1,4 @@
+import sequtils
 import strutils
 import strtabs
 import system
@@ -42,7 +43,7 @@ type
         root: Node
 
     Template* = ref object of RootObj
-        doc: Document
+        doc*: Document
         eidmap: Table[string, seq[Element]]
         aidmap: Table[string, seq[Element]]
         ridmap: Table[string, seq[Element]]
@@ -318,6 +319,18 @@ proc replace*(tmp:Template, eid:string, value:Template, idx:IndexType = INDEX_AL
 proc replaceHtml*(tmp:Template, eid:string, value:string, idx:IndexType = INDEX_ALL) =
     var replacement = CData(nodeType:ntCData, content:value)
     discard replaceInternal(tmp, eid, replacement, idx)
+
+
+proc appendHtml*(tmp:Template, eid:string, value:string, idx:IndexType = INDEX_ALL) =
+    if hasKey(tmp.eidmap, eid):
+        var val  = CData(nodeType:ntCData, content:value)
+        var elemlist = tmp.eidmap[eid]
+        if idx.all:
+            for elem in elemlist:
+                add(elem.children, val)
+        elif idx.pos < len(elemlist):
+            var elem = elemlist[idx.pos]
+            add(elem.children, val)
 
 
 proc repeat*(tmp:Template, rid:string, count:int) =

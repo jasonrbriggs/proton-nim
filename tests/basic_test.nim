@@ -156,3 +156,14 @@ suite "Proton tests":
         replaceHtml(tmp, "post-content", "<p>test3</p>", indexof(2))
 
         writeandcompare(tmp, "tmp/repeat3-2.xhtml", "../proton/resources/repeat3-2-result.xhtml")
+
+    test "append html content":
+        var tmp = gettemplate("../proton/resources/basic-append.xhtml")
+
+        tmp.setvalue("title", "Append Title")
+        tmp.setvalue("content", "Append Content")
+
+        tmp.appendHtml("head", "<meta name=\"description\" content=\"append description\" />")
+        tmp.appendHtml("content", "<p>some additional content</p>")
+
+        writeandcompare(tmp, "tmp/basic-append.xhtml", "../proton/resources/basic-append-result.xhtml")
