@@ -167,3 +167,14 @@ suite "Proton tests":
         tmp.appendHtml("content", "<p>some additional content</p>")
 
         writeandcompare(tmp, "tmp/basic-append.xhtml", "../proton/resources/basic-append-result.xhtml")
+
+    test "prepend html content":
+        var tmp = gettemplate("../proton/resources/basic-append.xhtml")
+
+        tmp.setvalue("title", "Append Title")
+        tmp.setvalue("content", "Append Content")
+
+        tmp.prependHtml("head", "<meta name=\"description\" content=\"append description\" />")
+        tmp.prependHtml("content", "<p>some additional content</p>")
+
+        writeandcompare(tmp, "tmp/basic-prepend.xhtml", "../proton/resources/basic-prepend-result.xhtml")

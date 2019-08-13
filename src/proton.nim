@@ -333,6 +333,18 @@ proc appendHtml*(tmp:Template, eid:string, value:string, idx:IndexType = INDEX_A
             add(elem.children, val)
 
 
+proc prependHtml*(tmp:Template, eid:string, value:string, idx:IndexType = INDEX_ALL) =
+    if hasKey(tmp.eidmap, eid):
+        var val  = CData(nodeType:ntCData, content:value)
+        var elemlist = tmp.eidmap[eid]
+        if idx.all:
+            for elem in elemlist:
+                insert(elem.children, val)
+        elif idx.pos < len(elemlist):
+            var elem = elemlist[idx.pos]
+            insert(elem.children, val)
+
+
 proc repeat*(tmp:Template, rid:string, count:int) =
     if hasKey(tmp.ridmap, rid):
         var elem = tmp.ridmap[rid][0]
