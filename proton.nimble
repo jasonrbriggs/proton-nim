@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.2.2"
+version       = "0.2.3"
 author        = "Jason R Briggs"
 description   = "Proton template engine"
 license       = "MIT"
