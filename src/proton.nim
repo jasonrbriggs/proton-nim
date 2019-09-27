@@ -61,12 +61,13 @@ const
     XMLDECL_PREFIX = "<?"
     DOCTYPE_PREFIX = "<!"
     INDEX_ALL* = IndexType(pos:0, all: true)
-    NULLTEMPLATES: Table[string, Template] = tables.initTable[string, Template]()
 
 var attribnames: array[3, string]
 attribnames = ["eid", "rid", "aid"]
 
 var templates: Table[string, Template] = tables.initTable[string, Template]()
+
+let nullTemplates: Table[string, Template] = tables.initTable[string, Template]()
 
 var counter: int = 0
 
@@ -360,9 +361,9 @@ proc repeat*(tmp:Template, rid:string, count:int) =
             storeallattrs(tmp, newelem)
 
 
-proc gettemplate*(name:string, cache:bool = true, tmps:Table[string, Template] = NULLTEMPLATES): Template {.gcsafe.} =
+proc gettemplate*(name:string, cache:bool = true, tmps:Table[string, Template] = nullTemplates): Template {.gcsafe.} =
     var local_templates = tmps
-    if local_templates == NULLTEMPLATES:
+    if local_templates == nullTemplates:
         local_templates = templates
     if not hasKey(tmps, name) or not cache:
         var f = open(name)

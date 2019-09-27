@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.2.3"
+version       = "0.2.4"
 author        = "Jason R Briggs"
 description   = "Proton template engine"
 license       = "MIT"
@@ -10,4 +10,4 @@ srcDir        = "src"
 
 # Dependencies
 
-requires "nim >= 0.16.0"
+requires "nim >= 1.0.0"
