@@ -27,7 +27,8 @@ proc writeandcompare(tmp:Template, fname:string, compareto:string) =
     var f = open(fname, fmWrite)
     print(f, tmp)
     close(f)
-    compare(compareto, fname)
+    if compareto != "":
+        compare(compareto, fname)
 
 
 suite "Proton tests":
@@ -178,3 +179,10 @@ suite "Proton tests":
         tmp.prependHtml("content", "<p>some additional content</p>")
 
         writeandcompare(tmp, "tmp/basic-prepend.xhtml", "../proton/resources/basic-prepend-result.xhtml")
+
+    test "replace and append content":
+        var tmp = gettemplate("../proton/resources/replace-append.xhtml")
+        var replace_content = gettemplate("../proton/resources/replace-append-content.xhtml")
+        replace(tmp, "head", replace_content, INDEX_ALL, true)
+
+        writeandcompare(tmp, "tmp/replace-append.xhtml", "../proton/resources/replace-append-result.xhtml")

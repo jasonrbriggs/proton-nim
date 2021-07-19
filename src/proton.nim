@@ -294,26 +294,30 @@ proc hide*(tmp:Template, eid:string, idx:IndexType = INDEX_ALL) =
         del(tmp.eidmap, eid)
 
 
-proc replaceInternal(tmp:Template, eid:string, value:Node, idx:IndexType = INDEX_ALL):bool  =
+proc replaceInternalElement(elem: Node, replacement: Node, append_children:bool = false) =
+    var parent = elem.parent
+    var pos = delseq(parent.children, elem)
+    insert(parent.children, replacement, pos)
+    if append_children:
+        insert(replacement.children, elem.children, 0)
+
+
+proc replaceInternal(tmp:Template, eid:string, value:Node, idx:IndexType = INDEX_ALL, append_children:bool = false):bool =
     if hasKey(tmp.eidmap, eid):
         var elemlist = tmp.eidmap[eid]
         if idx.all:
             for elem in elemlist:
-                var parent = elem.parent
-                var pos = delseq(parent.children, elem)
-                insert(parent.children, value, pos)
+                replaceInternalElement(elem, value, append_children)
         elif idx.pos < len(elemlist):
             var elem = elemlist[idx.pos]
-            var parent = elem.parent
-            var pos = delseq(parent.children, elem)
-            insert(parent.children, value, pos)
+            replaceInternalElement(elem, value, append_children)
         return true
     return false
 
 
-proc replace*(tmp:Template, eid:string, value:Template, idx:IndexType = INDEX_ALL) =
+proc replace*(tmp:Template, eid:string, value:Template, idx:IndexType = INDEX_ALL, append_children:bool = false) =
     var replacement = value.doc.root
-    if replaceInternal(tmp, eid, replacement, idx):
+    if replaceInternal(tmp, eid, replacement, idx, append_children):
         storeallattrs(tmp, replacement)
 
 
