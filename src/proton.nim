@@ -299,7 +299,8 @@ proc replaceInternalElement(elem: Node, replacement: Node, append_children:bool 
     var pos = delseq(parent.children, elem)
     insert(parent.children, replacement, pos)
     if append_children:
-        insert(replacement.children, elem.children, 0)
+        for child in elem.children:
+            add(replacement.children, child)
 
 
 proc replaceInternal(tmp:Template, eid:string, value:Node, idx:IndexType = INDEX_ALL, append_children:bool = false):bool =
